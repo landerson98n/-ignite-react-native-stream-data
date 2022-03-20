@@ -1,31 +1,39 @@
+import 'react-native-gesture-handler';
+
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import AppLoading from 'expo-app-loading';
-import { useFonts } from 'expo-font';
-import { DMSans_400Regular, DMSans_700Bold } from '@expo-google-fonts/dm-sans';
-
-import { AuthProvider } from './src/hooks/useAuth';
-import { Routes } from './src/routes';
 import { ThemeProvider } from 'styled-components/native';
+import AppLoading from 'expo-app-loading';
+import {
+  useFonts,
+  Roboto_400Regular,
+  Roboto_700Bold
+} from '@expo-google-fonts/roboto';
+import { StatusBar } from 'react-native';
 
-import theme from './src/styles/theme';
+import { Routes } from './src/routes';
+import { RepositoriesProvider } from './src/contexts/RepositoriesProvider';
+
+import theme from './src/global/styles/theme';
 
 export default function App() {
-  const [isLoaded] = useFonts({
-    DMSans_400Regular,
-    DMSans_700Bold
-  })
-  
-  if (!isLoaded) {
+  const [fontsLoaded] = useFonts({
+    Roboto_400Regular,
+    Roboto_700Bold
+  });
+
+  if (!fontsLoaded) {
     return <AppLoading />
   }
 
   return (
-    <AuthProvider>
-      <ThemeProvider theme={theme}>
-        <StatusBar style="light" backgroundColor="transparent" translucent />
-        <Routes />
-      </ThemeProvider>
-    </AuthProvider>
-  );
+    <>
+      <StatusBar backgroundColor={theme.colors.gray_50} barStyle="dark-content" />
+
+      <RepositoriesProvider>
+        <ThemeProvider theme={theme}>
+          <Routes />
+        </ThemeProvider>
+      </RepositoriesProvider>
+    </>
+  )
 }
